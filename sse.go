@@ -2,7 +2,7 @@
 // It provides basic functionality to handle Server-Sent Event over http
 // that *blocks* the event loop while the http connection is opened.
 // [SSE API design document]:
-// https://github.com/phymbert/xk6-sse/blob/master/docs/design/021-sse-api.md#proposed-solution
+// https://github.com/TimotejKovacka/xk6-sse/blob/master/docs/design/021-sse-api.md#proposed-solution
 package sse
 
 import (

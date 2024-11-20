@@ -1,11 +1,12 @@
 # xk6-sse
+
 A [k6](https://go.k6.io/k6) extension for [Server-Sent Events (SSE)](https://en.wikipedia.org/wiki/Server-sent_events) using the [xk6](https://github.com/grafana/xk6) system.
 
 See the [K6 SSE Extension design](docs/design/021-sse-api.md).
 
 ## k6 version
 
-This extension is tested with `k6` version `v0.51.0` last release is [v0.1.2](https://github.com/phymbert/xk6-sse/releases/tag/v0.1.2).
+This extension is tested with `k6` version `v0.51.0` last release is [v0.1.2](https://github.com/TimotejKovacka/xk6-sse/releases/tag/v0.1.2).
 
 ## Build
 
@@ -26,43 +27,45 @@ go install go.k6.io/xk6/cmd/xk6@latest
 
 ```shell
 xk6 build master \
---with github.com/phymbert/xk6-sse
+--with github.com/TimotejKovacka/xk6-sse
 ```
 
 ## Example
 
 ```javascript
-import sse from "k6/x/sse"
-import {check} from "k6"
+import sse from "k6/x/sse";
+import { check } from "k6";
 
 export default function () {
-    const url = "https://echo.websocket.org/.sse"
-    const params = {
-        method: 'GET',
-        headers: {
-            "Authorization": "Bearer XXXX"
-        },
-        tags: {"my_k6s_tag": "hello sse"}
-    }
+  const url = "https://echo.websocket.org/.sse";
+  const params = {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer XXXX",
+    },
+    tags: { my_k6s_tag: "hello sse" },
+  };
 
-    const response = sse.open(url, params, function (client) {
-        client.on('open', function open() {
-            console.log('connected')
-        })
+  const response = sse.open(url, params, function (client) {
+    client.on("open", function open() {
+      console.log("connected");
+    });
 
-        client.on('event', function (event) {
-            console.log(`event id=${event.id}, name=${event.name}, data=${event.data}`)
-            if (parseInt(event.id) === 4) {
-                client.close()
-            }
-        })
+    client.on("event", function (event) {
+      console.log(
+        `event id=${event.id}, name=${event.name}, data=${event.data}`
+      );
+      if (parseInt(event.id) === 4) {
+        client.close();
+      }
+    });
 
-        client.on('error', function (e) {
-            console.log('An unexpected error occurred: ', e.error())
-        })
-    })
+    client.on("error", function (e) {
+      console.log("An unexpected error occurred: ", e.error());
+    });
+  });
 
-    check(response, {"status is 200": (r) => r && r.status === 200})
+  check(response, { "status is 200": (r) => r && r.status === 200 });
 }
 ```
 
